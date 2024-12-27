@@ -1,0 +1,32 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main  # زمانی که روی شاخه‌ی main تغییرات اعمال می‌شود
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest  # محیط اجرا
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3  # دریافت کد از مخزن
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '14'  # نسخه‌ی Node.js که استفاده می‌کنید
+
+      - name: Install dependencies
+        run: npm install  # در صورتی که از Node.js برای ساخت سایت استفاده می‌کنید
+
+      - name: Build site
+        run: npm run build  # دستور ساخت سایت (اگر نیاز دارید)
+
+      - name: Deploy to GitHub Pages
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          branch: gh-pages  # شاخه‌ی خروجی که صفحات سایت در آن قرار می‌گیرد
+          folder: build  # پوشه‌ای که فایل‌های تولیدی سایت در آن قرار دارند (اگر سایت شما نیاز به build دارد)
+          token: ${{ secrets.GITHUB_TOKEN }}  # توکن دسترسی
